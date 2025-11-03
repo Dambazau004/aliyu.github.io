@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aliyu Lawan's Professional Portfolio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* --- Root Color Variables (Dark Mode Default) --- */
+        :root {
+            --color-bg-body: #0f172a; /* slate-900 */
+            --color-bg-card: #1e293b; /* slate-800 */
+            --color-border: #334155; /* slate-700 */
+            --color-text-primary: #e2e8f0; /* slate-200 */
+            --color-text-secondary: #94a3b8; /* slate-400 */
+            --color-accent: #6366f1; /* indigo-500 */
+            --color-accent-light: #a5b4fc; /* indigo-300 */
+        }
+        
+        /* --- Light Mode Variables --- */
+        .light-mode {
+            --color-bg-body: #f1f5f9; /* slate-100 */
+            --color-bg-card: #ffffff; /* white */
+            --color-border: #e2e8f0; /* slate-200 */
+            --color-text-primary: #1e293b; /* slate-800 */
+            --color-text-secondary: #64748b; /* slate-500 */
+            --color-accent: #4f46e5; /* indigo-600 */
+            --color-accent-light: #6366f1; /* indigo-500 */
+        }
+
+        /* Apply dynamic colors */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-body);
+            color: var(--color-text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .card-style {
+            background-color: var(--color-bg-card);
+            border-color: var(--color-border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Soft shadow */
+        }
+        .text-accent {
+            color: var(--color-accent);
+        }
+        .text-accent-light {
+            color: var(--color-accent-light);
+        }
+
+        /* --- Custom styling for timeline ring effect --- */
+        .timeline-dot {
+            /* Use a semi-transparent border color for card in dark/light mode */
+            box-shadow: 0 0 0 4px var(--color-bg-card); 
+        }
+
+        /* --- Loading Screen Styles --- */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-bg-body); 
+            z-index: 100; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .loader-image-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 6px solid var(--color-accent);
+            overflow: hidden;
+            position: relative;
+            animation: pulse-border 1.5s infinite alternate;
+            margin-bottom: 2rem;
+        }
+
+        .loader-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .snake-animation {
+            --size: 15px;
+            --color: var(--color-accent-light);
+            position: absolute;
+            width: var(--size);
+            height: var(--size);
+            background-color: var(--color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: snake-move 3s linear infinite;
+            filter: blur(2px);
+        }
+
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 var(--color-accent-light); }
+            100% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+        }
+
+        @keyframes snake-move {
+            0% { top: 0%; left: 50%; } 
+            25% { top: 50%; left: 100%; } 
+            50% { top: 100%; left: 50%; } 
+            75% { top: 50%; left: 0%; } 
+            100% { top: 0%; left: 50%; } 
+        }
+        
+        /* --- Moving Notification (Marquee) Styles --- */
+        #ticker-banner {
+            overflow: hidden;
+            white-space: nowrap;
+            position: sticky; /* Keep it at the top */
+            top: 0;
+            z-index: 50;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 600; /* font-semibold */
+        }
+        
+        #ticker-content {
+            display: inline-block;
+            padding-left: 100%; /* Start the text off-screen to the right */
+            animation: marquee 30s linear infinite; /* Control speed with duration */
+        }
+
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); } /* Move left by 100% of its own width */
+        }
+
+        .hidden-overlay {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Loading Screen Overlay (Always visible initially) -->
+    <div id="loading-overlay">
+        <div class="loader-image-container">
+            <img 
+                src="https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/499862285_1272789744362086_3514273323170452344_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFa_ygCyfqkr4zT72km9E8eCuxcHlCBzpMK7FweUIHOk0xCIxteoEFdU4erkXS03UcPaO6EdaNGSPoogdR3zbch&_nc_ohc=utX7EB2qG5oQ7kNvwG4Kltv&_nc_oc=AdlVvFHWiEiwbMxbKFRxnQwTt99UFXfVVM5L47Fxo0I7TVe53pbjpKYROdehfS0souE&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=L11FcUfxElZUPnB5-j7A6g&oh=00_Afj3P_RZvFVh050EFdAxW-gTddwEuZ5eTDvUoXPdhGWPpw&oe=690EB873"
+                alt="Aliyu Bashir Lawan Photo"
+                onerror="this.onerror=null; this.src='https://placehold.co/150x150/334155/e2e8f0?text=A.B.L'"
+            />
+            <div class="snake-animation"></div>
+        </div>
+        <p class="text-xl font-semibold text-white tracking-widest">LOADING PORTFOLIO...</p>
+        <p class="text-sm text-indigo-400 mt-2">Aliyu Bashir Lawan</p>
+    </div>
+    
+    <!-- Moving Notification Banner -->
+    <div id="ticker-banner">
+        <div id="ticker-content">
+            <span class="px-8">👋 Welcome! I am actively seeking collaborations on innovative ICT and digital solutions. Let's connect on WhatsApp!</span>
+            <span class="px-8">✨ Featured Projects: AliSun Mart, AliSun Vendor Platform, Dambazau Bank Concept. Check them out below!</span>
+            <span class="px-8">🚀 Skills: HTML, CSS, JavaScript, Firebase, CorelDRAW, and Digital Design. Available for remote work.</span>
+        </div>
+    </div>
+
+    <!-- Main Content Container (Invisible initially) -->
+    <div id="app" class="min-h-screen p-4 sm:p-8 md:p-12 invisible">
+        
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="fixed top-24 right-4 md:right-8 p-3 rounded-full shadow-xl z-40 transition-colors duration-300"
+                style="background-color: var(--color-bg-card); border: 1px solid var(--color-border);"
+                aria-label="Toggle Dark/Light Mode" onclick="toggleTheme()">
+            <!-- Icon will be set by JavaScript -->
+        </button>
+
+        <div class="max-w-6xl mx-auto space-y-8">
+            <header id="header-section"></header>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column (lg:col-span-2) -->
+                <div class="lg:col-span-2 space-y-8">
+                    <section id="about-section"></section>
+                    <section id="experience-section"></section>
+                    <section id="projects-section"></section>
+                </div>
+                <!-- Right Column (lg:col-span-1) -->
+                <div class="lg:col-span-1 space-y-8">
+                    <section id="contact-section"></section>
+                    <section id="skills-section"></section>
+                    <section id="education-section"></section>
+                </div>
+            </div>
+            <footer class="mt-12 text-center text-gray-500 text-sm">
+                &copy; <span id="current-year"></span> Aliyu Bashir Lawan. Crafted with HTML, CSS & JavaScript.
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // --- Theme Management ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        const getIcon = (name, className = 'w-6 h-6 mr-3 text-accent') => {
+            // ... (Icons definition remains the same, adding Sun and Moon)
+            const icons = {
+                Mail: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+                Phone: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-3.13-2.92 19.5 19.5 0 0 1-2.92-3.13A19.79 19.79 0 0 1 2 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 2 15.7 15.7 0 0 0 .58 3.42 2 2 0 0 1-.22 1.63L7.75 11.23a1 1 0 0 0-.25 1 17.5 17.5 0 0 0 5 4.88 1 1 0 0 0 1-.25l1.18-1.57a2 2 0 0 1 1.63-.22A15.7 15.7 0 0 0 20 13a2 2 0 0 1 2 2z"/></svg>`,
+                MapPin: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+                User: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+                Briefcase: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M14 2v5"/><path d="M10 2v5"/><path d="M15 12h5"/><path d="M10 12h.01"/><path d="M10 16h.01"/></svg>`,
+                Calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+                Code: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m16 4 4 4-4 4"/><path d="m8 12-4-4 4-4"/><path d="m18 16-6 6-6-6"/></svg>`,
+                Monitor: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>`,
+                BookOpen: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+                Target: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+                Send: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>`,
+                ExternalLink: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>`,
+                Moon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`,
+                Sun: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${className}"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`
+            };
+            return icons[name] || '';
+        };
+
+        const updateThemeIcon = (isLightMode) => {
+            const iconName = isLightMode ? 'Moon' : 'Sun';
+            const className = `w-6 h-6 ${isLightMode ? 'text-indigo-600' : 'text-yellow-400'}`;
+            themeToggleBtn.innerHTML = getIcon(iconName, className);
+        };
+
+        const setInitialTheme = () => {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+            let isLightMode = false;
+
+            if (savedTheme === 'light') {
+                isLightMode = true;
+            } else if (savedTheme === 'dark') {
+                isLightMode = false;
+            } else if (prefersLight) {
+                isLightMode = true;
+            }
+
+            if (isLightMode) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            updateThemeIcon(isLightMode);
+        };
+
+        const toggleTheme = () => {
+            const isLightMode = document.body.classList.toggle('light-mode');
+            const newTheme = isLightMode ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(isLightMode);
+        };
+        
+        // --- Data Definitions ---
+        const profileData = {
+            name: "Aliyu Bashir Lawan",
+            title: "CEO, Founder & Co-founder | ICT and Digital Solutions Leader",
+            objective: "Motivated and detail-oriented young professional with strong technical, analytical, and creative skills in ICT, web development, and digital design. Eager to contribute to innovative organizations through technical expertise, teamwork, and continuous learning.",
+            contact: {
+                phone: "+234 810 790 7647",
+                whatsappNumber: "2348107907647",
+                email: "dambazaualiyu@gmail.com",
+                location: "Kano State, Nigeria",
+            },
+            // <<< IMAGE PLACEMENT: UPDATE THIS URL WITH YOUR PROFESSIONAL PHOTO LINK >>>
+            photoUrl: "https://scontent.fabv3-2.fna.fbcdn.net/v/t39.30808-6/499862285_1272789744362086_3514273323170452344_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeFa_ygCyfqkr4zT72km9E8eCuxcHlCBzpMK7FweUIHOk0xCIxteoEFdU4erkXS03UcPaO6EdaNGSPoogdR3zbch&_nc_ohc=utX7EB2qG5oQ7kNvwG4Kltv&_nc_oc=AdlVvFHWiEiwbMxbKFRxnQwTt99UFXfVVM5L47Fxo0I7TVe53pbjpKYROdehfS0souE&_nc_zt=23&_nc_ht=scontent.fabv3-2.fna&_nc_gid=L11FcUfxElZUPnB5-j7A6g&oh=00_Afj3P_RZvFVh050EFdAxW-gTddwEuZ5eTDvUoXPdhGWPpw&oe=690EB873", 
+        };
+
+        const professionalSkills = [
+            { category: "Web Dev & Databases", skills: ["HTML", "CSS", "JavaScript", "MySQL", "Firebase"] },
+            { category: "Design & UX Tools", skills: ["CorelDRAW", "Digital Layout Design", "Figma", "Strikingly", "Wix", "AI Tools"] },
+            { category: "IT Operations", skills: ["Microsoft Office Suite (Word, Excel, PowerPoint, Access, Publisher)", "Computer Literacy", "LAN Setup, Troubleshooting, and Maintenance"] },
+        ];
+
+        const workExperiences = [
+            {
+                title: "CEO & Founder",
+                company: "Abu-Abdurrahman CodeVerge Technology",
+                duration: "2023 - Present",
+                tasks: ["Led technology strategy and execution for software development and digital solutions.", "Directed product roadmaps and oversaw technical team development.", "Driving innovation in coding and infrastructure for client projects."],
+            },
+            {
+                title: "Co-founder",
+                company: "AliSun Growth Venture",
+                duration: "2023 - Present",
+                tasks: ["Co-managed the strategic growth and digital transformation initiatives of the venture.", "Oversaw the development of key e-commerce and vendor platforms (AliSun Mart, AliSun Vendor).", "Involved in business development, partnership management, and operational strategy."],
+            },
+            {
+                title: "Assistant Director of Operations",
+                company: "BITCAGS LTD",
+                duration: "2022 - Present",
+                tasks: ["Assisted in supervising daily operations and administrative tasks.", "Supported IT infrastructure, computer maintenance, and digital service management.", "Contributed to design, printing, and technical service projects."],
+            }
+        ];
+
+        const projectsData = [
+            { name: "AliSun Mart (E-Commerce)", link: "https://alisunmart.vercel.app" },
+            { name: "AliSun Vendor Platform", link: "https://alisunvedors.vercel.app" },
+            { name: "Dambazau Bank (Concept)", link: "https://dambazaubank.vercel.app" },
+            { name: "Tasiu College (TCCQS)", link: "https://tccqs.vercel.app" },
+            { name: "H&H Snack and More", link: "https://hnh.vercel.app" },
+        ];
+
+        const education = [
+            { institution: "Government Technical College", qualification: "Senior Secondary School Certificate", year: "2016 - 2022" },
+            { institution: "BITCAGS LTD", qualification: "Certificate in Computer Training & Graphic Design", year: "Undated" },
+        ];
+
+        // --- Component Helpers ---
+
+        const Card = (content, className = '') => {
+            return `<div class="p-6 card-style rounded-2xl shadow-2xl transition duration-300 border ${className}">
+                        ${content}
+                    </div>`;
+        };
+
+        const SectionTitle = (iconName, title) => {
+            return `<h2 class="flex items-center text-2xl md:text-3xl font-bold text-text-primary mb-6 border-b-2 border-accent pb-2">
+                        ${getIcon(iconName, 'w-6 h-6 mr-3 text-accent')}
+                        ${title}
+                    </h2>`;
+        };
+
+        // --- Section Rendering Functions (Updated to use dynamic colors) ---
+
+        const renderHeader = (data) => {
+            const photoFrame = `
+                <div class="w-32 h-32 md:w-40 md:h-40 border-4 border-accent-light rounded-full flex items-center justify-center shadow-2xl mb-4 mx-auto md:mx-0 overflow-hidden"
+                    style="background-color: var(--color-bg-card);">
+                    <img
+                        src="${data.photoUrl}"
+                        alt="${data.name} Profile Photo"
+                        class="w-full h-full object-cover"
+                        onerror="this.onerror=null; this.src='https://placehold.co/160x160/334155/e2e8f0?text=Load+Error'"
+                    />
+                </div>
+            `;
+
+            const info = `
+                <div class="md:ml-8 mt-4 md:mt-0">
+                    <h1 class="text-4xl md:text-5xl font-black text-text-primary">${data.name}</h1>
+                    <p class="text-xl md:text-2xl font-bold text-accent mt-1 tracking-wider">${data.title}</p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 mt-4" style="color: var(--color-text-secondary);">
+                        <span class="flex items-center text-sm font-medium">${getIcon('Mail', 'w-4 h-4 mr-2 text-accent')}${data.contact.email}</span>
+                        <span class="flex items-center text-sm font-medium">${getIcon('Phone', 'w-4 h-4 mr-2 text-accent')}${data.contact.phone}</span>
+                        <span class="flex items-center text-sm font-medium">${getIcon('MapPin', 'w-4 h-4 mr-2 text-accent')}${data.contact.location}</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('header-section').innerHTML = Card(`
+                <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-left mb-8 p-0 md:p-4"
+                     style="background-color: transparent; border: none;">
+                    ${photoFrame}
+                    ${info}
+                </div>
+            `, 'bg-slate-700/50 backdrop-blur-sm border-b-4 border-indigo-600/50');
+        };
+
+        const renderAbout = (objective) => {
+            const hobbies = ['Research', 'Technology Exploration', 'Creative Design'].map(hobby => `
+                <span class="px-3 py-1 text-sm font-medium rounded-full" style="background-color: var(--color-border); color: var(--color-text-secondary);">${hobby}</span>
+            `).join('');
+
+            const content = `
+                ${SectionTitle('Monitor', 'Career Objective')}
+                <p class="text-lg leading-relaxed italic border-l-4 pl-4" style="color: var(--color-text-secondary); border-color: var(--color-accent);">
+                    ${objective}
+                </p>
+                <div class="mt-6">
+                    <h3 class="text-lg font-bold text-text-primary mb-2">Hobbies</h3>
+                    <div class="flex flex-wrap gap-2">
+                        ${hobbies}
+                    </div>
+                </div>
+            `;
+            document.getElementById('about-section').innerHTML = Card(content);
+        };
+
+        const renderExperience = (data) => {
+            const experiencesHtml = data.map((exp, index) => {
+                const tasksHtml = exp.tasks.map(task => `
+                    <li class="flex items-start" style="color: var(--color-text-secondary);">
+                        <span class="text-accent font-bold mr-2 mt-0.5">▪</span>
+                        ${task}
+                    </li>
+                `).join('');
+
+                return `
+                    <div class="relative">
+                        <!-- Timeline Dot with Calendar Icon -->
+                        <div class="absolute -left-3 top-1 w-6 h-6 bg-accent rounded-full timeline-dot flex items-center justify-center">
+                            ${getIcon('Calendar', 'w-3 h-3 text-white')}
+                        </div>
+                        <p class="text-sm font-bold text-accent">${exp.duration}</p>
+                        <h3 class="text-xl font-bold text-text-primary">${exp.title}</h3>
+                        <p class="text-md font-medium" style="color: var(--color-text-secondary);">${exp.company}</p>
+                        <ul class="list-none mt-3 space-y-2">
+                            ${tasksHtml}
+                        </ul>
+                    </div>
+                `;
+            }).join('');
+
+            const content = `
+                ${SectionTitle('Briefcase', 'Professional Experience')}
+                <div class="relative space-y-8 pl-8">
+                    <div class="absolute left-0 top-0 h-full w-1 rounded-full" style="background-color: var(--color-border);"></div>
+                    ${experiencesHtml}
+                </div>
+            `;
+            document.getElementById('experience-section').innerHTML = Card(content);
+        };
+
+        const renderProjects = (projects) => {
+            const projectsHtml = projects.map(project => `
+                <a href="${project.link}" target="_blank" rel="noopener noreferrer"
+                   class="p-4 border rounded-xl hover:bg-slate-700 transition duration-200 group flex justify-between items-center" style="border-color: var(--color-border); background-color: var(--color-bg-card);">
+                    <div>
+                        <p class="text-lg font-semibold text-text-primary group-hover:text-accent">${project.name}</p>
+                        <span class="text-xs truncate" style="color: var(--color-text-secondary);">${project.link.replace(/https?:\/\//, '')}</span>
+                    </div>
+                    ${getIcon('ExternalLink', 'w-5 h-5 text-accent group-hover:translate-x-1 transition duration-200')}
+                </a>
+            `).join('');
+
+            const content = `
+                ${SectionTitle('Target', 'Key Projects & Platforms')}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    ${projectsHtml}
+                </div>
+            `;
+            document.getElementById('projects-section').innerHTML = Card(content);
+        };
+
+        const renderSkills = (skills) => {
+            const skillsHtml = skills.map(group => {
+                const skillBadges = group.skills.map(skill => `
+                    <span class="px-3 py-1 text-sm font-medium rounded-full shadow-sm hover:text-white transition duration-150"
+                          style="background-color: var(--color-border); color: var(--color-text-primary); hover:bg-accent;">
+                        ${skill}
+                    </span>
+                `).join('');
+                
+                return `
+                    <div class="border-l-4 pl-4" style="border-color: var(--color-border);">
+                        <h3 class="text-lg font-extrabold text-text-primary mb-3 uppercase">${group.category}</h3>
+                        <div class="flex flex-wrap gap-2">
+                            ${skillBadges}
+                        </div>
+                    </div>
+                `;
+            }).join('<div class="h-6"></div>'); // Spacer
+
+            const content = `
+                ${SectionTitle('Code', 'Skills & Expertise')}
+                <div class="space-y-6">
+                    ${skillsHtml}
+                </div>
+            `;
+            document.getElementById('skills-section').innerHTML = Card(content, 'h-full');
+        };
+
+        const renderEducation = (data) => {
+            const educationHtml = data.map(item => `
+                <div class="flex justify-between items-start border-b pb-3" style="border-color: var(--color-border);">
+                    <div>
+                        <h3 class="text-lg font-semibold text-text-primary">${item.qualification}</h3>
+                        <p class="text-sm text-accent">${item.institution}</p>
+                    </div>
+                    <p class="text-sm font-medium mt-1 px-2 py-0.5 rounded-full" style="background-color: var(--color-border); color: var(--color-text-secondary);">${item.year}</p>
+                </div>
+            `).join('<div class="h-4"></div>');
+
+            const content = `
+                ${SectionTitle('BookOpen', 'Education & Certifications')}
+                <div class="space-y-4">
+                    ${educationHtml}
+                </div>
+            `;
+            document.getElementById('education-section').innerHTML = Card(content, 'h-full');
+        };
+
+        const renderContactForm = (phoneNumber) => {
+            const formContent = `
+                ${SectionTitle('Send', 'Connect with Aliyu')}
+                <p class="mb-4" style="color: var(--color-text-secondary);">Send a message directly via WhatsApp for the fastest response.</p>
+                <form id="whatsapp-form" class="space-y-4">
+                    <input type="text" id="name" placeholder="Your Name *" class="w-full p-3 border rounded-lg focus:ring-accent focus:border-accent transition duration-200 placeholder-gray-400" 
+                           style="border-color: var(--color-border); background-color: var(--color-bg-body); color: var(--color-text-primary);" required />
+                    <input type="text" id="subject" placeholder="Project Subject / Title *" class="w-full p-3 border rounded-lg focus:ring-accent focus:border-accent transition duration-200 placeholder-gray-400" 
+                           style="border-color: var(--color-border); background-color: var(--color-bg-body); color: var(--color-text-primary);" required />
+                    <textarea id="message" placeholder="Your Detailed Message *" class="w-full p-3 border rounded-lg focus:ring-accent focus:border-accent transition duration-200 placeholder-gray-400 h-32 resize-none" 
+                              style="border-color: var(--color-border); background-color: var(--color-bg-body); color: var(--color-text-primary);" required></textarea>
+                    <button type="submit" class="w-full flex items-center justify-center py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:bg-indigo-500 transition duration-300 transform hover:scale-[1.01]">
+                        ${getIcon('Send', 'w-5 h-5 mr-2 text-white')}
+                        Send via WhatsApp
+                    </button>
+                </form>
+            `;
+            document.getElementById('contact-section').innerHTML = Card(formContent, 'bg-gradient-to-br from-slate-700 to-slate-800 shadow-2xl');
+
+            // Attach event listener
+            document.getElementById('whatsapp-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+
+                const showMessage = (msg) => {
+                    console.error("Form Error:", msg);
+                    // Placeholder for non-alert notification (e.g., using a custom modal if needed)
+                };
+
+                if (!name || !subject || !message) {
+                    showMessage("Please fill in your Name, Subject, and Message.");
+                    return;
+                }
+
+                const prefilledMessage = `Hello Aliyu, my name is ${encodeURIComponent(name)}. I'm interested in discussing the project: "${encodeURIComponent(subject)}".\n\nMy Message:\n${encodeURIComponent(message)}`;
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${prefilledMessage}`;
+
+                window.open(whatsappUrl, '_blank');
+            });
+        };
+
+        // Function to hide the loader and show the main content
+        const hideLoader = () => {
+            const loader = document.getElementById('loading-overlay');
+            const app = document.getElementById('app');
+            if (loader && app) {
+                loader.classList.add('opacity-0');
+                
+                // Remove the loader after the fade-out transition completes
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    app.classList.remove('invisible');
+                }, 500);
+            }
+        };
+
+        // --- Initialization ---
+        window.onload = function() {
+            // 0. Set the initial theme preference
+            setInitialTheme(); 
+            
+            // 1. Render all content *before* hiding the loader (to ensure everything is built when shown)
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            renderHeader(profileData);
+            renderAbout(profileData.objective);
+            renderExperience(workExperiences);
+            renderProjects(projectsData);
+            renderSkills(professionalSkills);
+            renderEducation(education);
+            renderContactForm(profileData.contact.whatsappNumber);
+
+            // 2. Hide the loader after a delay (3 seconds) to show the animation
+            setTimeout(hideLoader, 3000);
+            
+            console.log("Portfolio content generated, theme set, and delayed for splash screen.");
+        };
+    </script>
+</body>
+</html>
